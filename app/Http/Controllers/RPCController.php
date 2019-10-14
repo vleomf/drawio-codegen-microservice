@@ -24,6 +24,6 @@ class RPCController extends Controller
         $fileAdapter = new MXFile(new \SimpleXmlElement( $request->xml ));
         $fileAdapter->totalPages();
         $fileAdapter->totalNodesFromPage(0);
-        return "Hola index";
+        return $request->xml;
     }
 }
