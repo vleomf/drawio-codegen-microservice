@@ -14,6 +14,10 @@ class RPCController extends Controller
      */
     public function __construct(){}
 
+    public function health(Request $request) {
+        return "ok";
+    }    
+
     /**
      ** Controlador RPC, Aqui inician las llamadas
      ** JSON-RPC.
@@ -21,9 +25,21 @@ class RPCController extends Controller
      */
     public function call(Request $request) 
     {
-        $fileAdapter = new MXFile(new \SimpleXmlElement( $request->xml ));
+
+        //  $request: 
+        //      - lang: Que lenguaje quieres que genere
+        //      - xml:  El XML a parsear
+
+        if( strtolower($request->lang) == "php") {
+            $this->GenerarPHP($request->xml);
+        }
+               
+        return $request;
+    }
+
+    private function GenerarPHP( $xml ) {
+         /*$fileAdapter = new MXFile(new \SimpleXmlElement( $request->xml ));
         $fileAdapter->totalPages();
-        $fileAdapter->totalNodesFromPage(0);
-        return $request->xml;
+        $fileAdapter->totalNodesFromPage(0);*/
     }
 }

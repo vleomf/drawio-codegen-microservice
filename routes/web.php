@@ -11,4 +11,8 @@
 |
 */
 
-$router->post('/', 'RPCController@call');
+//  Esta es una ruta para checar que el servicio esta activo
+$router->get( '/', 'RPCController@health');
+
+//  Esta es la ruta de RPC
+$router->post('/', 'RPCController@call'  );
