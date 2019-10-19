@@ -27,6 +27,7 @@ class MXFile implements IMXFileAdapter
      */
     public function totalPages() : int 
     {
+        $this->reader->diagram = $this->Inflate($this->reader->diagram);
         var_dump($this->reader); die;
         return count($this->reader->diagram);
     }
@@ -55,4 +56,12 @@ class MXFile implements IMXFileAdapter
     {
         return null;
     }
+
+     /**
+     * Metodo para inflar el diagrama mxfile, compresion gzip en base 64
+     */
+    private static function Inflate(string $xml)
+    {
+        return utf8_decode( urldecode( gzinflate( base64_decode( $xml ) ) ) ); 
+    } 
 }
