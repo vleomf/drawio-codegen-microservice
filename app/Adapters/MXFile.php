@@ -28,7 +28,6 @@ class MXFile implements IMXFileAdapter
     public function totalPages() : int 
     {
         $this->reader->diagram = $this->Inflate($this->reader->diagram);
-        var_dump($this->reader); die;
         return count($this->reader->diagram);
     }
 
