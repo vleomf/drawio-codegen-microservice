@@ -44,19 +44,36 @@ class MXFile implements IMXFileAdapter
         }
         try
         {
-            var_dump($this->reader->diagram[$page][0]); die;
-            $total = count( $this->reader->diagram[$page]->root );
+            $innerXmlElement = new \SimpleXmlElement($this->reader->diagram[$page]);
+            $total = count( $innerXmlElement->root->mxCell );
         }
         //  Si no existe la pagina en documento regresamos 0;
-        catch(\Exception $e) { 
-            print_r($e); die;
-            $total = 0; }
+        catch(\Exception $e) 
+        { 
+            $total = 0; 
+        }
         return $total;
     }
 
-    public function getMXCell(int $page, int $nodePosition) : IMXCell
+    public function getMXCell(int $page, int $nodePosition) : \SimpleXmlElement
     {
-        return null;
+        //  Validacion de pagina en numero positivo
+        if($page < 0 ) {
+            //return null;
+        }
+        try
+        {
+            $innerXmlElement = new \SimpleXmlElement($this->reader->diagram[$page]);
+            $node = $innerXmlElement->root->mxCell[$nodePosition];
+            //var_dump($node); die;
+        }
+        //  Si no existe la pagina en documento regresamos 0;
+        catch(\Exception $e) 
+        { 
+            //  ESTO NO ES CORRECTO, SOLO POR PRUEBAS
+            var_dump($e); die;
+        }
+        return $node;
     }
 
      /**

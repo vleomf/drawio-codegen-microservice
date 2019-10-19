@@ -24,7 +24,7 @@ interface IMXFileAdapter
      ** Metodo para obtener nodo del documento por pagina
      *  @param  int     pagina del documento
      *  @param  int     posicion del nodo
-     *  @return MxNode  nodo
+     *  @return \SimpleXmlElement  nodo   
      */
-    public function getMXCell(int $page, int $nodePosition) : IMXCell;
+    public function getMXCell(int $page, int $nodePosition) : \SimpleXmlElement;
 }
