@@ -7,6 +7,8 @@ use App\Adapters\MXFile;
 
 class RPCController extends Controller
 {
+    private $xmlFileStrategy;
+
     /**
      * Create a new controller instance.
      *
@@ -38,8 +40,9 @@ class RPCController extends Controller
     }
 
     private function GenerarPHP( $xml ) {
-         /*$fileAdapter = new MXFile(new \SimpleXmlElement( $request->xml ));
-        $fileAdapter->totalPages();
-        $fileAdapter->totalNodesFromPage(0);*/
+        $this->xmlFileStrategy = new MXFile(new \SimpleXmlElement( $xml ));
+        $totalPaginas = $this->xmlFileStrategy->totalPages();
+        $totalNodosPorPagina = $this->xmlFileStrategy->totalNodesFromPage(0);
+        print_r($totalPaginas); die;
     }
 }
