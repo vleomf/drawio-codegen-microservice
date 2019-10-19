@@ -42,7 +42,11 @@ class RPCController extends Controller
     private function GenerarPHP( $xml ) {
         $this->xmlFileStrategy = new MXFile(new \SimpleXmlElement( $xml ));
         $totalPaginas = $this->xmlFileStrategy->totalPages();
-        $totalNodosPorPagina = $this->xmlFileStrategy->totalNodesFromPage(0);
+        for($i = 0; $i<$totalPaginas; $i++){
+            $totalNodosPorPagina = $this->xmlFileStrategy->totalNodesFromPage($i);
+            print_r($totalNodosPorPagina); die;
+        }
+        
         print_r($totalPaginas); die;
     }
 }

@@ -44,10 +44,13 @@ class MXFile implements IMXFileAdapter
         }
         try
         {
-            $total = count( $this->reader->diagram[$page]->mxGraphModel->root->mxCell );
+            var_dump($this->reader->diagram[$page][0]); die;
+            $total = count( $this->reader->diagram[$page]->root );
         }
         //  Si no existe la pagina en documento regresamos 0;
-        catch(\Exception $e) { $total = 0; }
+        catch(\Exception $e) { 
+            print_r($e); die;
+            $total = 0; }
         return $total;
     }
 
