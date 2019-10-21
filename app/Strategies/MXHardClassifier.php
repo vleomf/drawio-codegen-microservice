@@ -12,7 +12,7 @@ class MXHardClassifier implements IMXClassifier
      *                 - method
      *                 - relationship
      */
-    public function classify($SimpleXmlNode) : string 
+    public function classify(& $SimpleXmlNode) : string 
     {
         //  Variable de control
         $clasificacion = "";
@@ -30,6 +30,7 @@ class MXHardClassifier implements IMXClassifier
         if( $this->isGlobalElement($SimpleXmlNode) ) 
         {
             $clasificacion = $this->parseStyleAttribute($SimpleXmlNode);
+            $this->trimValueAttribute($SimpleXmlNode);
         }
         else
         {
@@ -99,12 +100,39 @@ class MXHardClassifier implements IMXClassifier
         //  y 'endFill' existen...
         if( isset( $styleDict['endArrow'] ) && isset( $styleDict['endFill'] ) )
         {
-            //  Si los valores son 'block' y '0', se supone que es una flecha de herencia
+            //  Si los valores son 'block' y '0', se supone que es la flecha de "generalization"
             if( $styleDict['endArrow'] == 'block' && $styleDict['endFill'] == '0') {
                 return "inheritance";
             }
+
+            //  Si los valores son 'diamondThin' y '1', se supone que es la flecha de "composicion 2"
+            if( strtolower( $styleDict['endArrow'] ) == 'diamondthin' && $styleDict['endFill'] == '1') {
+                return "composition";
+            }
+
+            //  Si los valores son 'diamondThin' y '1', se supone que es la flecha de "aggregation 2"
+            if( strtolower( $styleDict['endArrow'] ) == 'diamondthin' && $styleDict['endFill'] == '0') {
+                return "aggregation";
+            }
         }
 
+        //  Buscamos en el diccionario de estilos si las llaves 'startArrow'
+        //  y 'startFill' existen...
+        if( isset( $styleDict['startArrow'] ) && isset( $styleDict['startFill'] ) )
+        {
+            //  Si los valores son 'diamondThin' y '1', se supone que es la flecha de "composicion 1"
+            if( strtolower( $styleDict['startArrow'] ) == 'diamondthin' && $styleDict['startFill'] == '1') {
+               return "composition";
+            } 
+
+            //  Si los valores son 'diamondThin' y '0', se supone que es la flecha de "agregacion 1"
+            if( strtolower( $styleDict['startArrow'] ) == 'diamondthin' && $styleDict['startFill'] == '0') {
+                return "aggregation";
+            } 
+        }
+
+        //var_dump($styleDict); 
+        
         //  Se asume que por default todo elemento global es una clase 
         //  (por el momento no se toma en cuenta las interfaces)
         return "class";
@@ -126,5 +154,17 @@ class MXHardClassifier implements IMXClassifier
         if(preg_match_all($functionRegex, $SimpleXmlNode['value']))  return "method";
 
         return "";
+    }
+
+
+    /**
+     *  Este metodo elimina cualquier entidad HTML en el valor del nodo,
+     *  dejando solo el texto que nos interesa.
+     */
+    private function trimValueAttribute(& $SimpleXmlNode) : void
+    {
+        $trimRegex = "/\<.*?\s?\>/";
+        $trimmedValue = preg_replace($trimRegex, '', $SimpleXmlNode['value']);
+        $SimpleXmlNode['value'] = $trimmedValue;
     }
 }
