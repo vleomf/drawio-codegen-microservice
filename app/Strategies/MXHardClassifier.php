@@ -83,15 +83,9 @@ class MXHardClassifier implements IMXClassifier
     {
         $styleDict = []; // Diccionario de estilos
         $styles = explode( ';', $SimpleXmlNode['style'] );
-        
-        //  Si el parametro en la posicion 0 es endArrow, entonces 
-        //  este elemento es una flecha de relacion
-        //  NOTA: Queda por verificar los valores de endArrow para
-        //  todas las demas flechas de relacion
 
-        //  Ahorita sabemos que la flecha de Especializacion (herencia)
-        //  tiene el valor endArrow = block
-
+        //  Convertimos la lista de estilos a un diccionario de estilos
+        //  para facilitar la busqueda
         foreach( $styles as $style )
         {
             $keyval = explode( "=" , $style );
@@ -101,13 +95,18 @@ class MXHardClassifier implements IMXClassifier
             }
         }
 
+        //  Buscamos en el diccionario de estilos si las llaves 'endArrow' 
+        //  y 'endFill' existen...
         if( isset( $styleDict['endArrow'] ) && isset( $styleDict['endFill'] ) )
         {
-            if( $styleDict['endArrow'] == 'block' && $styleDict['endFill'] == 0) {
+            //  Si los valores son 'block' y '0', se supone que es una flecha de herencia
+            if( $styleDict['endArrow'] == 'block' && $styleDict['endFill'] == '0') {
                 return "inheritance";
             }
         }
 
+        //  Se asume que por default todo elemento global es una clase 
+        //  (por el momento no se toma en cuenta las interfaces)
         return "class";
     }
 
