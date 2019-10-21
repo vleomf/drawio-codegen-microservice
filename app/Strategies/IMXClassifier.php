@@ -11,5 +11,5 @@ interface IMXClassifier
     /**
      *   @param \SimpleXmlElement Es el nodo que retorna MXFile
      */
-    public function classify($SimpleXmlNode) : string;
+    public function classify(& $SimpleXmlNode) : string;
 }
