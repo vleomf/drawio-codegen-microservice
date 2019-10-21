@@ -33,8 +33,8 @@ class MXHardClassifier implements IMXClassifier
         }
         else
         {
-            //  Atributo, Metodo
-            $clasificacion = "anidado";
+            //  Si no es elemento global, verificamos si es atributo o metodo
+            $clasificacion = $this->parseValueAttribute($SimpleXmlNode);
         }
 
         return $clasificacion;
@@ -77,7 +77,7 @@ class MXHardClassifier implements IMXClassifier
      *  un elemento class o relationship
      * 
      *  @param \SimpleXmlElement Elemento de XML que genera nuestro MXFile
-     *  @return bool Define si el nodo es un elemento UML global
+     *  @return string 
      */
     private function parseStyleAttribute($SimpleXmlNode) : string
     {
@@ -111,8 +111,21 @@ class MXHardClassifier implements IMXClassifier
         return "class";
     }
 
+    /**
+     *  Este metodo parsea el atributo de valor, determina si es 
+     *  attribute o method
+     * 
+     *  @param \SimpleXmlElement Elemento de XML que genera nuestro MXFile
+     *  @return string 
+     */
     private function parseValueAttribute($SimpleXmlNode) : string
     {
+        $attributeRegex = "/(\+|\-|\#)\s?\w+\s?:\s?.*/";
+        $functionRegex  = "/(\+|\-|\#)\s?\w+\s?\(\s?(.*?)\s?\).*/";
+        
+        if(preg_match_all($attributeRegex, $SimpleXmlNode['value'])) return "attribute";
+        if(preg_match_all($functionRegex, $SimpleXmlNode['value']))  return "method";
 
+        return "";
     }
 }
