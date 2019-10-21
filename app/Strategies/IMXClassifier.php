@@ -8,5 +8,8 @@ use App\Factories\IMXCell;
 
 interface IMXClassifier 
 {
-    public function classify($SimpleXmlNode) : IMXCell;
+    /**
+     *   @param \SimpleXmlElement Es el nodo que retorna MXFile
+     */
+    public function classify($SimpleXmlNode) : string;
 }
