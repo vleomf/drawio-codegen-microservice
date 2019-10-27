@@ -30,7 +30,7 @@ class MXHardClassifier implements IMXClassifier
         if( $this->isGlobalElement($SimpleXmlNode) ) 
         {
             $clasificacion = $this->parseStyleAttribute($SimpleXmlNode);
-            $this->trimValueAttribute($SimpleXmlNode);
+            $this->trimValueAttribute($SimpleXmlNode); // Algunas clases insertan HTML
         }
         else
         {
