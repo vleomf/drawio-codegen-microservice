@@ -5,12 +5,15 @@ use Laravel\Lumen\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Adapters\MXFile;
 use App\Strategies\MXHardClassifier;
+use App\Factories\MXCellFactory;
 
 class RPCController extends Controller
 {
-    private $xmlFileAdapter;
-    private $nodes;
-    private $classifier;
+    private $xmlFileAdapter;        //  Adaptador de XML
+    private $classifier;            //  Clasificado a ocupar
+    private $nodes;                 //  Nodos XML
+    private $mxNodes;               //  Instancias MXCell
+    private $mxCellFactory;         //  Fabrica de nodos MXCell
 
     /**
      * Create a new controller instance.
@@ -21,8 +24,13 @@ class RPCController extends Controller
         //  Inicializamos lista para guardar nodos que
         //  nos genera el Adaptador de archivo MXFile
         $this->nodes = [];
+        $this->mxNodes = [];
+        
         //  Definimos el clasificador a ocupar
         $this->classifier = new MXHardClassifier();
+
+        //  Definimos la fabrica a ocupar
+        $this->mxCellFactory = new MXCellFactory();
     }
 
     public function health(Request $request) {
@@ -79,10 +87,28 @@ class RPCController extends Controller
         //var_dump($this->nodes); die;
         foreach($this->nodes as $node) 
         {
+            //  Traemos la clasificacion del nodo XML
             $clasificacion = $this->classifier->classify($node);
+            
+            //  Obtenemos
+            $id = isset($node['id']) ? $node['id'] : '0';  
+            $parentID = isset( $node['parent'] ) ? $node['parent'] : '0';
+            switch($clasificacion)
+            {
+                //  Traemos instancia de MXClass de factory
+                case 'class':
+                    $this->mxNodes[ strval($id) ] = $this->mxCellFactory->getMXClass($node);
+                    break;
+                case 'attribute':
+                    $this->mxNodes[ strval( $parentID ) ]->insertAttribute( $this->mxCellFactory->getMXAttribute($node) );
+                    break;
+            }
+            
 
-            var_dump($node['id'], $node['value']);
-            var_dump($clasificacion); echo "<br />";
+            
+            
+            //var_dump($clasificacion);
+            //var_dump($clasificacion); echo "<br />";        
             // switch($clasificacion) 
             // {
             //     case "global" :
@@ -91,7 +117,7 @@ class RPCController extends Controller
             //     break;
             // }
         }
-        
+        var_dump($this->mxNodes);
         die;
 
         
