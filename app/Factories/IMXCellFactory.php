@@ -4,15 +4,15 @@ namespace App\Factories;
 interface IMXCellFactory 
 {
     //  Debe retornar MXAttribute
-    public function getMXAttribute() : \App\Factories\MXAtribute;
+    public function getMXAttribute( $simpleXmlElement );
 
     //  Debe retornar MXClass
-    public function getMXClass(): \App\Factories\MXClass;
+    public function getMXClass( $simpleXmlElement );
 
     //  Deber retornar MXMethod
-    public function getMXMethod(): \App\Factories\MXMethod;
+    public function getMXMethod( $simpleXmlElement );
 
     //  Deber retornar MXRelationship
-    public function getMXRelationship(): \App\Factories\MXRelationship;
+    public function getMXRelationship( $simpleXmlElement );
 
 }

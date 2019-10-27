@@ -1,6 +1,5 @@
 <?php
 namespace App\Factories;
-use App\Factories\IMXCell;
 
 class MXClass implements IMXCell
 {
@@ -10,15 +9,16 @@ class MXClass implements IMXCell
     public $methods;
     public $relationships;
 
-    public function __construct($id, $name, $attributes, $methods, $relationships) {
+    public function __construct($id, $name) {
         $this->id = $id;
         $this->name = $name;
-        $this->attributes = $attributes;
-        $this->methods = $methods;
-        $this->relationships = $relationships;
     }
 
-    public function toString($language) {
+    public function insertAttribute( $attribute ) : void {
+        $this->attributes[] = $attribute;
+    }
+
+    public function toString($language) : string {
         if( strtolower( $language ) == 'php')
         {
             $this->phpString();

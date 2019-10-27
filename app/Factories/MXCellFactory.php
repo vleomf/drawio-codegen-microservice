@@ -1,27 +1,42 @@
 <?php
 namespace App\Factories;
 
-use App\Factories\MXAttribute;
-use App\Factories\MXClass;
-use App\Factories\MXMethod;
-use App\Factories\MXRelationship;
-
-class MXCellFactory implements  App\Factories\IMXCellFactory
+class MXCellFactory implements IMXCellFactory
 {
-    public function getMXAttribute( $simpleXmlElement ){
+    public function getMXAttribute( $simpleXmlElement ) : MXAttribute {
+        //  Obtener el valor de SimpleXmlElement
+        //  En este indice se encuentran los datos que necesitamos
+        //  parsear.
+
+        //  Parseamos nivel de encapsulamiento
+        $value = trim( $simpleXmlElement['value'] );
+        $encapsulationLevel = $value[0];
+
+        //  Parseamos nombre y tipo de retorno
+        $value = trim( substr( $simpleXmlElement['value'], 1 ) );
+        $value = explode( ':', $value );
+        $name  = trim( $value[0] );
+        $returnType = trim( $value[1] );
+
+        return new MXAttribute(
+            $simpleXmlElement['id'],
+            $name, $encapsulationLevel, $returnType
+        );
+    }
+
+    public function getMXClass( $simpleXmlElement) : MXClass {
         //  Primero obtenemos parametros 
-        return new MXAttribute(/** AQUI PASAMOS PARAMETROS */);
+        return new MXClass(
+            $simpleXmlElement['id'],
+            $simpleXmlElement['value']
+        );
     }
 
-    public function getMXClass( $simpleXmlElement) {
-        return new MXClass(/**AQUI PASAMOS LOS PARAMS */);
-    }
-
-    public function getMXMethod($simpleXmlElement) {
+    public function getMXMethod($simpleXmlElement) : MXMethod {
         return new MXMethod(/**AQUI PASAMOS LOS PARAMS */);
     }
 
-    public function getMXRelationship($simpleXmlElement) {
+    public function getMXRelationship($simpleXmlElement) : MXRelationship{
         return new MXRelationship(/**AQUI PASAMOS LOS PARAMS */);
     }
 }

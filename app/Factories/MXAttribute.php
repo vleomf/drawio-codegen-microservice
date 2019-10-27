@@ -1,6 +1,5 @@
 <?php
 namespace App\Factories;
-use App\Factories\IMXCell;
 
 class MXAttribute implements IMXCell
 {
@@ -17,7 +16,7 @@ class MXAttribute implements IMXCell
         $this->dataType = $dataType;
     }
 
-    public function toString($language) {
+    public function toString($language) : string {
         if( strtolower( $language ) == "php" ) {
 
         }

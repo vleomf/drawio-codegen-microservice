@@ -1,6 +1,5 @@
 <?php
 namespace App\Factories;
-use App\Factories\IMXCell;
 
 class MXRelationships implements IMXCell
 {
@@ -8,13 +7,15 @@ class MXRelationships implements IMXCell
     public $relationshipType;
     public $target;
 
-    public function __construct($id, $relationshipType, $target){
+    /*public function __construct($id, $relationshipType, $target){
         $this->id = $id;
         $this->relationshipType = $relationshipType;
         $this->target = $target;
-    }
+    }*/
 
-    public function toString( $language ) {
+    public function __construct() {}
+
+    public function toString( $language ) : string {
         if( strtolower($language) == 'php' ) {
             $this->phpString();
         }
