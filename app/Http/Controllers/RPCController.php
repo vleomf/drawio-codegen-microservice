@@ -102,6 +102,19 @@ class RPCController extends Controller
                 case 'attribute':
                     $this->mxNodes[ strval( $parentID ) ]->insertAttribute( $this->mxCellFactory->getMXAttribute($node) );
                     break;
+                case 'method':
+                    $this->mxNodes[ strval ($parentID) ]->insertMethod( $this->mxCellFactory->getMXMethod($node) );
+                    break;
+                case 'inheritance':
+                $this->mxNodes[strval($node ['source']) ] ->inserRelationshipType($this->mxCellFactory->getMXRelationship($node, 'inheritance' ));
+                    break;
+               /*  case 'composition':
+                $this->mxNodes[strval($node ['']) ] ->inserRelationshipType($this->mxCellFactory->getMXRelationship($node, 'composition' ));
+                    break;
+                case 'aggregation':
+                $this->mxNodes[strval($node ['']) ] ->inserRelationshipType($this->mxCellFactory->getMXRelationship($node, 'aggregation' ));
+                    break; */
+                
             }
             
 
@@ -117,6 +130,8 @@ class RPCController extends Controller
             //     break;
             // }
         }
+        //var_dump($this->mxNodes ['VDleZtpJP4OSMNpLtCZ--15'] );
+        //var_dump($this->mxNodes ['VDleZtpJP4OSMNpLtCZ--7']  );
         var_dump($this->mxNodes);
         die;
 

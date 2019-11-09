@@ -9,15 +9,13 @@ class MXMethod implements IMXCell
     public $parameters;
     public $returnType;
 
-    /*public function __construct($id, $name, $encapsulationlevel, $parameters, $returnType) {
+    public function __construct($id, $name, $encapsulationlevel, $parameters, $returnType) {
         $this->id = $id;
         $this->name = $name;
         $this->encapsulationLevel = $encapsulationlevel;
         $this->parameters = $parameters;
         $this->returnType = $returnType;
-    }*/
-
-    public function __construct() {}
+    }
 
     public function toString($language) : string {
         if( strtolower($language) == 'php' ){

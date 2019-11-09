@@ -33,10 +33,33 @@ class MXCellFactory implements IMXCellFactory
     }
 
     public function getMXMethod($simpleXmlElement) : MXMethod {
-        return new MXMethod(/**AQUI PASAMOS LOS PARAMS */);
+
+        $value = trim( $simpleXmlElement['value'] );
+        $encapsulationLevel = $value[0];
+        
+        $value = trim ( $simpleXmlElement ['value'] );
+        $parameters = $value[0];
+
+
+        $value = trim ( substr ( $simpleXmlElement ['value'], 1) );
+        $value = explode (':', $value );
+        $name  = trim($value[0] );
+        $returnType = trim( $value [1] );
+
+        return new MxMethod (
+            $simpleXmlElement['id'],
+            $name, $encapsulationLevel, $parameters, $returnType
+        );
     }
 
-    public function getMXRelationship($simpleXmlElement) : MXRelationship{
-        return new MXRelationship(/**AQUI PASAMOS LOS PARAMS */);
+    public function getMXRelationship($simpleXmlElement, $type) : MXRelationship {
+        $id = $simpleXmlElement ['id'];
+        $relationshipType = $type;
+        $target = $simpleXmlElement ['source'];
+
+        return new MXRelationship(
+             $simpleXmlElement['id'],
+            $relationshipType, $target
+        );
     }
 }

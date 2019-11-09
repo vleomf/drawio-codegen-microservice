@@ -18,6 +18,14 @@ class MXClass implements IMXCell
         $this->attributes[] = $attribute;
     }
 
+    public function insertMethod( $method ) : void {
+        $this->methods[] = $method;
+    }
+     public function inserRelationshipType ( $relationship ) :void {
+        $this->relationships[] = $relationship;
+
+    }
+
     public function toString($language) : string {
         if( strtolower( $language ) == 'php')
         {
