@@ -10,7 +10,7 @@ class MXAttribute implements IMXCell
 
     //  NOTA: Consturctor debe recibir todos los parametros o solo un SimpleXMLElement
     public function __construct($id, $name, $encapsulationLevel, $dataType) {
-        $this->$id = $id;
+        $this->id = $id;
         $this->name = $name;
         $this->encapsulationLevel = $encapsulationLevel;
         $this->dataType = $dataType;
