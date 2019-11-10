@@ -21,7 +21,7 @@ class MXClass implements IMXCell
     public function insertMethod( $method ) : void {
         $this->methods[] = $method;
     }
-     public function inserRelationshipType ( $relationship ) :void {
+     public function insertRelationshipType ( $relationship ) :void {
         $this->relationships[] = $relationship;
 
     }
