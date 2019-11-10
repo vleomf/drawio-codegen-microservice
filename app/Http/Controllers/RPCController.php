@@ -93,6 +93,7 @@ class RPCController extends Controller
             //  Obtenemos
             $id = isset($node['id']) ? $node['id'] : '0';  
             $parentID = isset( $node['parent'] ) ? $node['parent'] : '0';
+
             switch($clasificacion)
             {
                 //  Traemos instancia de MXClass de factory
@@ -106,15 +107,20 @@ class RPCController extends Controller
                     $this->mxNodes[ strval ($parentID) ]->insertMethod( $this->mxCellFactory->getMXMethod($node) );
                     break;
                 case 'inheritance':
-                $this->mxNodes[strval($node ['source']) ] ->inserRelationshipType($this->mxCellFactory->getMXRelationship($node, 'inheritance' ));
+                    $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'inheritance' ));
                     break;
-               /*  case 'composition':
-                $this->mxNodes[strval($node ['']) ] ->inserRelationshipType($this->mxCellFactory->getMXRelationship($node, 'composition' ));
+                case 'composition':
+                    $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'composition' ));
                     break;
                 case 'aggregation':
-                $this->mxNodes[strval($node ['']) ] ->inserRelationshipType($this->mxCellFactory->getMXRelationship($node, 'aggregation' ));
-                    break; */
-                
+                    $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'aggregation' ));
+                    break; 
+                case 'interface':
+                    $this->mxNodes[ strval($id) ] = $this->mxCellFactory->getMXInterface($node);
+                    break;
+                case 'implementation':
+                    $this->mxNodes[ strval($node['source']) ]->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'implementation' ));
+                    break;
             }
             
 
