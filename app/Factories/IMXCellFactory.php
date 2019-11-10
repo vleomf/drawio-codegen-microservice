@@ -15,4 +15,6 @@ interface IMXCellFactory
     //  Deber retornar MXRelationship
     public function getMXRelationship( $simpleXmlElement, $type);
 
+    //  Debe retornar MXInterface
+    public function getMXInterface($simpleXmlElement);
 }
