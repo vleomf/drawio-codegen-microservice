@@ -29,6 +29,19 @@ class MXHardClassifier implements IMXClassifier
         //  Nota: Los elementos globales son Class, Relationship
         if( $this->isGlobalElement($SimpleXmlNode) ) 
         {
+            //  Verificamos si es una INTERFAZ y evitamos que
+            //  se haga el parseo por estilo y se obtienen datos de 
+            //  valor, se ejecuta en método dedicado debido
+            //  a la naturaleza del elemento UML en Drawio
+            if($this->isInterface($SimpleXmlNode))
+            {
+                //  Terminamos de validar el elemento y 
+                //  regresamos el valor directamente
+                //  para terminar la ejecución del resto 
+                //  de filtos;
+                return 'interface';
+            }
+
             $clasificacion = $this->parseStyleAttribute($SimpleXmlNode);
             $this->trimValueAttribute($SimpleXmlNode); // Algunas clases insertan HTML
         }
@@ -102,8 +115,15 @@ class MXHardClassifier implements IMXClassifier
         {
             //  Si los valores son 'block' y '0', se supone que es la flecha de "generalization"
             if( $styleDict['endArrow'] == 'block' && $styleDict['endFill'] == '0') {
+                //  Si los valores son los mismos de "generalizacion", pero las lineas son punteadas
+                if( $styleDict['dashed'] == '1' )
+                {
+                    return "implementation";
+                }
                 return "inheritance";
             }
+
+            
 
             //  Si los valores son 'diamondThin' y '1', se supone que es la flecha de "composicion 2"
             if( strtolower( $styleDict['endArrow'] ) == 'diamondthin' && $styleDict['endFill'] == '1') {
@@ -166,5 +186,15 @@ class MXHardClassifier implements IMXClassifier
         $trimRegex = "/\<.*?\s?\>/";
         $trimmedValue = preg_replace($trimRegex, '', $SimpleXmlNode['value']);
         $SimpleXmlNode['value'] = $trimmedValue;
+    }
+
+    /**
+     * Este metodo determina si el elemento a evaluar es una INTERFAZ
+     */
+    private function isInterface(& $SimpleXmlNode) : bool
+    {
+        $isInterface = false;
+        if(preg_match('/&lt;&lt;Interface&gt;&gt;/', $SimpleXmlNode['value'])) $isInterface = true;
+        return $isInterface;
     }
 }
