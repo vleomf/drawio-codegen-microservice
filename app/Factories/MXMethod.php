@@ -5,14 +5,14 @@ class MXMethod implements IMXCell
 {
     public $id;
     public $name;
-    public $encapsulationlevel;
+    public $encapsulationLevel;
     public $parameters;
     public $returnType;
 
-    public function __construct($id, $name, $encapsulationlevel, $parameters, $returnType) {
+    public function __construct($id, $name, $encapsulationLevel, $parameters, $returnType) {
         $this->id = $id;
         $this->name = $name;
-        $this->encapsulationLevel = $encapsulationlevel;
+        $this->encapsulationLevel = $encapsulationLevel;
         $this->parameters = $parameters;
         $this->returnType = $returnType;
     }
