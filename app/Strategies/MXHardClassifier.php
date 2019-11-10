@@ -116,7 +116,7 @@ class MXHardClassifier implements IMXClassifier
             //  Si los valores son 'block' y '0', se supone que es la flecha de "generalization"
             if( $styleDict['endArrow'] == 'block' && $styleDict['endFill'] == '0') {
                 //  Si los valores son los mismos de "generalizacion", pero las lineas son punteadas
-                if( $styleDict['dashed'] == '1' )
+                if( isset( $styleDict['dashed'] ) && $styleDict['dashed'] == '1' )
                 {
                     return "implementation";
                 }
