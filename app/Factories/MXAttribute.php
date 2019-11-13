@@ -25,4 +25,30 @@ class MXAttribute implements IMXCell
     private function phpString() {
         //  ERste metodo convierte esta clase en su equivalente en PHP (texto)
     }
+
+    /**
+     *  NOTA. Los metodos descritos a partir de aqui en adelante
+     *        deben ser abstraidos en otra clase, para evitar duplicidad 
+     *        de código
+     */
+
+    public function setRelationshipNodesReferences($mxNodes) : void
+    {
+        $this->mxNodes = $mxNodes;
+    }
+
+    private function encapsulationLevelToString($encapsulationLevel) {
+        switch($encapsulationLevel)
+        {
+            case '+':
+                return 'public';
+                break;
+            case '-':
+                return 'private';
+                break;
+            case '#';
+                return 'protected';
+                break;
+        }
+    }
 }

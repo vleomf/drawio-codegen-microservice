@@ -26,4 +26,30 @@ class MXMethod implements IMXCell
     private function phpString(){
         //  Crear el equivalente de esta clase en PHP
     }
+
+     /**
+     *  NOTA. Los metodos descritos a partir de aqui en adelante
+     *        deben ser abstraidos en otra clase, para evitar duplicidad 
+     *        de código
+     */
+
+    public function setRelationshipNodesReferences($mxNodes) : void
+    {
+        $this->mxNodes = $mxNodes;
+    }
+
+    private function encapsulationLevelToString($encapsulationLevel) {
+        switch($encapsulationLevel)
+        {
+            case '+':
+                return 'public';
+                break;
+            case '-':
+                return 'private';
+                break;
+            case '#';
+                return 'protected';
+                break;
+        }
+    }
 }

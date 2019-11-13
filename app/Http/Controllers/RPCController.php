@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 use Laravel\Lumen\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Adapters\MXFile;
+use App\Adapters\OutputFile;
 use App\Strategies\MXHardClassifier;
 use App\Factories\MXCellFactory;
 
 class RPCController extends Controller
 {
     private $xmlFileAdapter;        //  Adaptador de XML
+    private $outputFileAdapter;     //  Adaptador de archivos de salida
+    private $outputFilePath;        //  Ruta de directorio donde se guardan los archivos generados
     private $classifier;            //  Clasificado a ocupar
     private $nodes;                 //  Nodos XML
     private $mxNodes;               //  Instancias MXCell
@@ -31,6 +34,9 @@ class RPCController extends Controller
 
         //  Definimos la fabrica a ocupar
         $this->mxCellFactory = new MXCellFactory();
+
+        //  Definimos la ruta para guardar los archivos generados
+        $this->outputFilePath = realpath(__DIR__ . '/../../../public/');
     }
 
     public function health(Request $request) {
@@ -122,26 +128,9 @@ class RPCController extends Controller
                     $this->mxNodes[ strval($node['source']) ]->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'implementation' ));
                     break;
             }
-            
-
-            
-            
-            //var_dump($clasificacion);
-            //var_dump($clasificacion); echo "<br />";        
-            // switch($clasificacion) 
-            // {
-            //     case "global" :
-            //         var_dump($node);
-            //         //var_dump($node["value"], $node["style"]);
-            //     break;
-            // }
         }
-        //var_dump($this->mxNodes ['VDleZtpJP4OSMNpLtCZ--15'] );
-        //var_dump($this->mxNodes ['VDleZtpJP4OSMNpLtCZ--7']  );
-        var_dump($this->mxNodes);
-        die;
-
-        
-        print_r($totalPaginas); die;
+        //  Instanciamos adaptador de archivos de salida
+        $outputFileAdapter = new OutputFile($this->outputFilePath, 'php');
+        $outputFileAdapter->Write($this->mxNodes);
     }
 }
