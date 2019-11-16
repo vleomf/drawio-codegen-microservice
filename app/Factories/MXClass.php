@@ -44,16 +44,21 @@ class MXClass implements IMXCell
         //  Organizamos las relaciones
         $totalImplementations = [];
         $totalExtensions = [];
-        foreach($this->relationships as $relationship)
-        {
-            if($relationship->relationshipType == 'implementation')
+        //var_dump(is_null($this->relationships)); die;
+        //Validamos que relationships no sea nulo
+        if ($this->relationships != null){
+                foreach($this->relationships as $relationship)
             {
-                $totalImplementations[] = $this->mxNodes[$relationship->target];
+                if($relationship->relationshipType == 'implementation')
+                {
+                    $totalImplementations[] = $this->mxNodes[$relationship->target];
+                }
+                if($relationship->relationshipType == 'inheritance')
+                {
+                    $totalExtensions[] = $this->mxNodes[$relationship->target];
+                }
             }
-            if($relationship->relationshipType == 'inheritance')
-            {
-                $totalExtensions[] = $this->mxNodes[$relationship->target];
-            }
+
         }
         
         //  Interpolamos relaciones
