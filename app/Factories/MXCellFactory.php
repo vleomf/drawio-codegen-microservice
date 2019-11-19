@@ -1,5 +1,6 @@
 <?php
 namespace App\Factories;
+use App\Strategies\MXHardClassifier;
 
 class MXCellFactory implements IMXCellFactory
 {
@@ -139,36 +140,63 @@ class MXCellFactory implements IMXCellFactory
     }
 
     public function getMXInterface($simpleXmlElement)
-    {
+    { 
         $idInterface = $simpleXmlElement['id']->__toString();
         
-        $metadatos = $simpleXmlElement['value']->__toString();
-        preg_match('/<br><b>.*?<\/b><\/p>/', $metadatos, $nombreIntefaz);
-        $nombreIntefaz = substr($nombreIntefaz[0], 7);
-        $nombreIntefaz = substr($nombreIntefaz, 0, -8);
+        //  Obtenemos los metadatos de la propiedad value
+        $valueData = $simpleXmlElement['value']->__toString();
+        //  Obtenemos lista de metadatos.
+        //  Los metadatos obtenidos varía el número de
+        //  separadores tiene un elemento Interface 
 
-        preg_match_all('/<p style="margin: 0px ; margin\-left\: 4px">.*?<\/p>/', $metadatos, $metodosInterfaz);
-
-        $metodos = [];
-        foreach($metodosInterfaz[0] as $mi)
+        if(strpos($valueData, '<hr size="1"/>'))
         {
-            //  Limpiar todas las entidades HTML
-            preg_match('/>.*?</', $mi, $valorMi);
-            $valorMi = str_replace('>', '', $valorMi);
-            $valorMi = str_replace('<', '', $valorMi);
-            $valorMi = str_replace('&nbsp;', '', $valorMi);
-            $valorMi = trim($valorMi[0]);
-            
-            //  Parseamos metodos
-            $listaParseo = $this->parseMXMethod($valorMi);
-            $metodos[] = new MXMethod (
-                null,
-                $listaParseo['methodNameSubtring'], 
-                $listaParseo['encapsulationLevel'], 
-                $listaParseo['mxParameters'],
-                $listaParseo['returnTypeSubstring']
-            );
+            $metaData = explode('<hr size="1"/>', $valueData);
         }
-        return new MXInterface($idInterface, $nombreIntefaz, $metodos);
+        else
+        {
+            $metaData = explode('<hr size="1">', $valueData);
+        }
+        //  Obtenemos nombre de interfaz
+        preg_match('/<b>.*?<\/b>/', $metaData[0], $interfaceName);
+
+        $interfaceName = substr($interfaceName[0], 3, strlen($interfaceName[0]));  
+        $interfaceName = substr($interfaceName, 0, -4);
+        unset($metaData[0]);
+
+        //  Verificamos el resto de metadatos
+        $interfaceData = [];
+        foreach($metaData as $mData)
+        {
+            $dom = new \DOMDocument();
+            $dom->loadHTML($mData);
+            $mDataText = $dom->textContent;
+            $classification = MXHardClassifier::ClassifyAtributeOrMethod($mDataText);
+            
+            if($classification == 'attribute')
+            {
+                preg_match_all('/(\+|\-|\#)\s?\w*:\s?\w*/', $mDataText, $pregData);
+                $interfaceData['attributes'] = $pregData[0];
+            }
+
+            if($classification == 'method')
+            {
+                preg_match_all('/(\+|\-|\#)(\s)?\w+\s?\((((\w?)*\s?\:?)*(\,|\s|\))*)+/', $mDataText, $pregData);
+                $interfaceData['methods'] = $pregData[0];
+            }
+        }
+        foreach($interfaceData['methods'] as $interfaceMethodString)
+        {
+            $result = $this->parseMXMethod($interfaceMethodString);
+            $mxMethod = new MXMethod (
+                null,
+                $result['methodNameSubtring'], 
+                $result['encapsulationLevel'], 
+                $result['mxParameters'],
+                $result['returnTypeSubstring']
+            );
+            $interfaceData['mxMethods'][] = $mxMethod;
+        }
+        return new MXInterface($idInterface, $interfaceName, $interfaceData['mxMethods']);
     }
 }

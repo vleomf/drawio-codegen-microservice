@@ -122,6 +122,7 @@ class RPCController extends Controller
                     $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'aggregation' ));
                     break; 
                 case 'interface':
+                    //$this->mxCellFactory->getMXInterface($node);
                     $this->mxNodes[ strval($id) ] = $this->mxCellFactory->getMXInterface($node);
                     break;
                 case 'implementation':
@@ -129,6 +130,9 @@ class RPCController extends Controller
                     break;
             }
         }
+
+        var_dump($this->mxNodes); die;
+
         //  Instanciamos adaptador de archivos de salida
         $outputFileAdapter = new OutputFile($this->outputFilePath, 'php');
         $outputFileAdapter->Write($this->mxNodes);

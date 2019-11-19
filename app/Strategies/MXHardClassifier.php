@@ -39,6 +39,7 @@ class MXHardClassifier implements IMXClassifier
                 //  regresamos el valor directamente
                 //  para terminar la ejecución del resto 
                 //  de filtos;
+                //  var_dump($SimpleXmlNode); 
                 return 'interface';
             }
 
@@ -48,7 +49,7 @@ class MXHardClassifier implements IMXClassifier
         else
         {
             //  Si no es elemento global, verificamos si es atributo o metodo
-            $clasificacion = $this->parseValueAttribute($SimpleXmlNode);
+            $clasificacion = $this->parseValueAttribute($SimpleXmlNode['value']);
         }
 
         return $clasificacion;
@@ -165,13 +166,24 @@ class MXHardClassifier implements IMXClassifier
      *  @param \SimpleXmlElement Elemento de XML que genera nuestro MXFile
      *  @return string 
      */
-    private function parseValueAttribute($SimpleXmlNode) : string
+    private function parseValueAttribute($value) : string
     {
         $attributeRegex = "/(\+|\-|\#)\s?\w+\s?:\s?.*/";
         $functionRegex  = "/(\+|\-|\#)\s?\w+\s?\(\s?(.*?)\s?\).*/";
-        
-        if(preg_match_all($attributeRegex, $SimpleXmlNode['value'])) return "attribute";
-        if(preg_match_all($functionRegex, $SimpleXmlNode['value']))  return "method";
+    
+        if(preg_match_all($attributeRegex, $value)) return "attribute";
+        if(preg_match_all($functionRegex,  $value)) return "method";
+
+        return "";
+    }
+
+    public static function ClassifyAtributeOrMethod($value) : string
+    {
+        $attributeRegex = "/(\+|\-|\#)\s?\w+\s?:\s?.*/";
+        $functionRegex  = "/(\+|\-|\#)\s?\w+\s?\(\s?(.*?)\s?\).*/";
+    
+        if(preg_match_all($attributeRegex, $value)) return "attribute";
+        if(preg_match_all($functionRegex,  $value)) return "method";
 
         return "";
     }
