@@ -38,8 +38,8 @@ class MXClass implements IMXCell
     private function phpString() {
         //  Aqui creamos el equivalente en PHP de esta clase
         //var_dump(); die;
-        $outputString  = "<?php\n";    
-        $outputString .= "class $this->name "; 
+        //$outputString  = "<?php\n";    
+        $outputString = "class $this->name "; 
 
         //  Organizamos las relaciones
         $totalImplementations = [];
@@ -97,17 +97,23 @@ class MXClass implements IMXCell
         $outputString.= "{\n";
         
         //  Interpolamos variables
-        foreach($this->attributes as $attribute)
+        if(isset($this->attributes))
         {
-            $encapsulationLevel = $this->encapsulationLevelToString($attribute->encapsulationLevel);
-            $outputString .= "\t$encapsulationLevel $$attribute->name;\n";
+            foreach($this->attributes as $attribute)
+            {
+                $encapsulationLevel = $this->encapsulationLevelToString($attribute->encapsulationLevel);
+                $outputString .= "\t$encapsulationLevel $$attribute->name;\n";
+            }
         }
 
         //  Interpolamos metodos
-        foreach($this->methods as $method)
+        if(isset($this->methods))
         {
-            $encapsulationLevel = $this->encapsulationLevelToString($method->encapsulationLevel);
-            $outputString .= "\t$encapsulationLevel function $method->name(){}\n";
+            foreach($this->methods as $method)
+            {
+                $encapsulationLevel = $this->encapsulationLevelToString($method->encapsulationLevel);
+                $outputString .= "\t$encapsulationLevel function $method->name(){}\n";
+            }
         }
 
         //  Finalizamos bloque de clase

@@ -116,7 +116,11 @@ class RPCController extends Controller
                     $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'inheritance' ));
                     break;
                 case 'composition':
-                    $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'composition' ));
+                    //  Las interfaces tienen la direccion de composicion al reves
+                    if(isset($this->mxNodes[strval($node ['source']) ]) && get_class($this->mxNodes[strval($node['source'])]) != 'App\Factories\MXInterface')
+                    {
+                        $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'composition' ));
+                    }
                     break;
                 case 'aggregation':
                     $this->mxNodes[strval($node ['source']) ] ->insertRelationshipType($this->mxCellFactory->getMXRelationship($node, 'aggregation' ));
@@ -131,10 +135,11 @@ class RPCController extends Controller
             }
         }
 
-        var_dump($this->mxNodes); die;
+        //var_dump($this->mxNodes); die;
 
         //  Instanciamos adaptador de archivos de salida
         $outputFileAdapter = new OutputFile($this->outputFilePath, 'php');
+        var_dump($this->mxNodes);
         $outputFileAdapter->Write($this->mxNodes);
     }
 }

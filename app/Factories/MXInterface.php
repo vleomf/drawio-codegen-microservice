@@ -21,6 +21,11 @@ class MXInterface implements IMXCell
         }
     }
 
+    public function insertRelationshipType ( $relationship ) :void {
+        $this->relationships[] = $relationship;
+
+    }
+
     private function phpString() {
         return "";
     }
