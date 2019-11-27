@@ -23,7 +23,10 @@ class MXAttribute implements IMXCell
     }
 
     private function phpString() {
-        //  ERste metodo convierte esta clase en su equivalente en PHP (texto)
+        $encapsulationLevel = $this->encapsulationLevelToString($this->encapsulationLevel);
+        $attributeName = $this->name;
+        $outputString = "\t$encapsulationLevel $attributeName;\n";
+        return $outputString;
     }
 
     /**

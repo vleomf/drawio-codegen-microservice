@@ -27,7 +27,11 @@ class MXInterface implements IMXCell
     }
 
     private function phpString() {
-        return "";
+        $codeString = "\n";
+
+        //  Iniciamos interface
+        $interfaceName = $this->name;
+        $codeString .= "interface $interfaceName {\n";        
     }
 
      /**

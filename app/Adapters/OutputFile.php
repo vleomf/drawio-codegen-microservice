@@ -10,8 +10,20 @@ class OutputFile implements IOutputFileAdapter
         $this->path = $path;
     }
 
-    public function Write($mxNodes) : void  
+    public function Write($mxNodes, $lang) : string  
     {
+        $returnString = "";
+        switch($lang)
+        {
+            case 'php': $returnString = $this->WritePHP($mxNodes);
+        }
+        return $returnString;
+    }
+
+    private function WritePHP($mxNodes)
+    {
+        $stringContent = "<?php\n";
+
         //var_dump("aqui", $mxNodes); die;
         foreach($mxNodes as $node)
         {
@@ -19,9 +31,8 @@ class OutputFile implements IOutputFileAdapter
             //  obtener los datos de las relaciones
             //  entre clases e interfaces
             $node->setRelationshipNodesReferences($mxNodes);
-            $stringContent = $node->toString('php');
-            var_dump($stringContent);
+            $stringContent .= $node->toString('php');
         }
-        die;    
+        return $stringContent;
     }
 }

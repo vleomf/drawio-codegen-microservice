@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Laravel\Lumen\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Adapters\MXFile;
 use App\Adapters\OutputFile;
 use App\Strategies\MXHardClassifier;
@@ -40,7 +41,7 @@ class RPCController extends Controller
     }
 
     public function health(Request $request) {
-        return "ok";
+        return "health: ok";
     }    
 
     /**
@@ -50,21 +51,43 @@ class RPCController extends Controller
      */
     public function call(Request $request) 
     {
-
         //  $request: 
         //      - lang: Que lenguaje quieres que genere
         //      - xml:  El XML a parsear
+        $unique_name = uniqid('codegen_');
+        $dir_path    = realpath( __DIR__ . '/../../../public/');
+        $file_path   = $dir_path. '/' .$unique_name;
 
         if( strtolower($request->lang) == "php") {
-            $this->GenerarPHP($request->xml);
+            $outputFileString = $this->GenerarPHP($request->xml);
+            file_put_contents($file_path, $outputFileString);
+            
+            //  Retornamos código en respuesta
+            //  Se agregan cabeceras para retornar el nombre en los metadatos HTTP
+            return response()->download($file_path, $unique_name . '.php', [
+                'Content-Type : application/octet-stream',
+                'Content-Disposition : attachment; filename = "' . $unique_name . '.php"' ,
+            ]);
         }
-               
-        return $request;
+
+
+        //  Ninguna opción válida
+        return new Response([
+            'error' => 'Not found',
+            'payload' => [
+                'lang' => $request->lang,
+                'xml'  => $request->xml
+            ]
+        ], 404);
     }
 
     private function GenerarPHP( $xml ) {
         //  Cargamos cadena XML en el Adaptador
         $this->xmlFileAdapter = new MXFile(new \SimpleXmlElement( $xml ));
+
+        //var_dump("\nRPCController.GenerarPHP");
+        //var_dump($xml); 
+        //die;
         
         //  Obtenemos el total de paginas dentro del XML 
         //  Nota: El diagrama de Drawoio genera los xml por pagina
@@ -139,7 +162,8 @@ class RPCController extends Controller
 
         //  Instanciamos adaptador de archivos de salida
         $outputFileAdapter = new OutputFile($this->outputFilePath, 'php');
-        var_dump($this->mxNodes);
-        $outputFileAdapter->Write($this->mxNodes);
+        $outputFileString  = $outputFileAdapter->Write($this->mxNodes, 'php');
+
+        return $outputFileString;
     }
 }

@@ -27,7 +27,12 @@ class MXFile implements IMXFileAdapter
      */
     public function totalPages() : int 
     {
+        //var_dump("MXFile.totalPages()");
+        //var_dump($this->reader);
+        //die;
+
         $this->reader->diagram = $this->Inflate($this->reader->diagram);
+        //  var_dump($this->reader); die;
         return count($this->reader->diagram);
     }
 
@@ -71,7 +76,8 @@ class MXFile implements IMXFileAdapter
         catch(\Exception $e) 
         { 
             //  ESTO NO ES CORRECTO, SOLO POR PRUEBAS
-            var_dump($e); die;
+            var_dump("MXFile.getMXCell Exception");
+            //var_dump($e);
         }
         return $node;
     }
@@ -81,6 +87,21 @@ class MXFile implements IMXFileAdapter
      */
     private static function Inflate(string $xml)
     {
-        return utf8_decode( urldecode( gzinflate( base64_decode( $xml ) ) ) ); 
+        //var_dump("\nMXFile.Inflate");
+        //var_dump($xml); 
+        //die;
+        try
+        {
+            $inflated = utf8_decode( urldecode( gzinflate( base64_decode( $xml ) ) ) );
+            return $inflated; 
+        }
+        catch(\Exception $e)
+        {
+            var_dump("MXFile.Inflate exception");
+            //var_dump($e); 
+            //die;
+            return "";
+        }
+        
     } 
 }
