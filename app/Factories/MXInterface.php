@@ -31,7 +31,10 @@ class MXInterface implements IMXCell
 
         //  Iniciamos interface
         $interfaceName = $this->name;
-        $codeString .= "interface $interfaceName {\n";        
+        $codeString .= "interface $interfaceName {\n";   
+        $codeString .= "\t\$miPropiedadHarcodeada\n";
+        $codeString .= "}";  
+        return $codeString;   
     }
 
      /**
