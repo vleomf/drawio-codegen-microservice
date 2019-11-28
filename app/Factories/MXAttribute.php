@@ -18,7 +18,7 @@ class MXAttribute implements IMXCell
 
     public function toString($language) : string {
         if( strtolower( $language ) == "php" ) {
-
+            return $this->phpString();
         }
     }
 

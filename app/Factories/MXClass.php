@@ -99,14 +99,10 @@ class MXClass implements IMXCell
         //  Interpolamos variables
         if(isset($this->attributes))
         {
-            //foreach($this->attributes as $attribute)
-            //{
-            //   $outputString .= $attribute->toString('php');
-            //}
             foreach($this->attributes as $attribute)
             {
-                $encapsulationLevel = $this->encapsulationLevelToString($attribute->encapsulationLevel);
-                $outputString .= "\t$encapsulationLevel $$attribute->name;\n";
+                $outputString .= $attribute->toString('php');
+                
             }
         }
 
