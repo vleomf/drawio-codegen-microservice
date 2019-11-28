@@ -19,12 +19,26 @@ class MXMethod implements IMXCell
 
     public function toString($language) : string {
         if( strtolower($language) == 'php' ){
-            $this->phpString();
+            return $this->phpString();
         }
     }
 
     private function phpString(){
-        //  Crear el equivalente de esta clase en PHP
+        $encapsulationLevel = $this->encapsulationLevelToString($this->encapsulationLevel);
+        $methodName = $this->name;
+        $outputString = "\t$encapsulationLevel function $methodName( ";
+
+        //  Parseamos los parámetros
+        foreach($this->parameters as $parameter)
+        {
+            //var_dump($parameter);
+            $name     = $parameter->name;
+            $dataType = $parameter->dataType;
+            $outputString .= "$name: $dataType, ";
+        }
+        if(count($this->parameters)) $outputString = substr($outputString, 0, -2);
+        $outputString .= " ){}\n";
+        return $outputString;
     }
 
      /**

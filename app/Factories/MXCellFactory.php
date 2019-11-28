@@ -185,6 +185,7 @@ class MXCellFactory implements IMXCellFactory
                 $interfaceData['methods'] = $pregData[0];
             }
         }
+        
         foreach($interfaceData['methods'] as $interfaceMethodString)
         {
             $result = $this->parseMXMethod($interfaceMethodString);

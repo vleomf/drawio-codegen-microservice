@@ -101,8 +101,7 @@ class MXClass implements IMXCell
         {
             foreach($this->attributes as $attribute)
             {
-                $outputString .= $attribute->toString('php');
-                
+                $outputString .= $attribute->toString('php');   
             }
         }
 
@@ -111,8 +110,9 @@ class MXClass implements IMXCell
         {
             foreach($this->methods as $method)
             {
-                $encapsulationLevel = $this->encapsulationLevelToString($method->encapsulationLevel);
-                $outputString .= "\t$encapsulationLevel function $method->name(){}\n";
+                //$encapsulationLevel = $this->encapsulationLevelToString($method->encapsulationLevel);
+                //$outputString .= "\t$encapsulationLevel function $method->name(){}\n";
+                $outputString .= $method->toString('php');
             }
         }
 
