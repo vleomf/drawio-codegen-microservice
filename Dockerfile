@@ -9,5 +9,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Instalamos dependencias
 RUN composer install --no-interaction
 
+# Instalamos git
+RUN apt-get update -y && apt-get install git -y
+
 # corremos servidor de desarrollo
 CMD php -S 0.0.0.0:8080 -t public
