@@ -39,7 +39,7 @@ class MXClass implements IMXCell
         //  Aqui creamos el equivalente en PHP de esta clase
         //var_dump(); die;
         //$outputString  = "<?php\n";    
-        $outputString = "class $this->name "; 
+        $outputString = "\n\nclass $this->name "; 
 
         //  Organizamos las relaciones
         $totalImplementations = [];
